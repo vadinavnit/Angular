@@ -1,0 +1,144 @@
+--------------- HttpConfigInterceptor ------------------
+
+
+import { Injectable } from '@angular/core';
+import { tap } from 'rxjs/operators';
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse,
+  HttpHandler,
+  HttpEvent
+} from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { SpinnerService } from '../../services/spinner.service';
+
+@Injectable()
+export class HttpConfigInterceptor implements HttpInterceptor {
+  constructor(private spinnerservice: SpinnerService, public router: Router) {}
+
+  intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    this.spinnerservice.show();
+    return next.handle(request).pipe(
+      tap(
+        event => {
+          if (event instanceof HttpResponse) {
+            this.spinnerservice.hide();
+            if (event.body.status === 0) {
+              localStorage.clear();
+              this.router.navigate(['/login']);
+            }
+          }
+        },
+        error => {
+          this.router.navigate(['/page-404']);
+          this.spinnerservice.hide();
+        }
+      )
+    );
+  }
+}
+
+
+--------------- SpinnerService ------------------
+
+
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+
+export class SpinnerService {
+  isLoading = new Subject<boolean>();
+
+  show() {
+    this.isLoading.next(true);
+  }
+
+  hide() {
+    this.isLoading.next(false);
+  }
+}
+
+
+--------------- page-loader.component.ts ------------------
+
+import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { SpinnerService } from '../../services/spinner.service';
+
+@Component({
+  selector: 'app-page-loader',
+  templateUrl: './page-loader.component.html',
+  styleUrls: ['./page-loader.component.css']
+})
+
+export class PageLoaderComponent {
+  isLoading: Subject<boolean>;
+
+  constructor(private spinnerservice: SpinnerService) {
+    this.isLoading = this.spinnerservice.isLoading;
+  }
+}
+
+
+--------------- page-loader.component.html ------------------
+
+<div *ngIf="isLoading | async" class="page-loader-wrapper">
+  <div class="loader">
+      <div class="m-t-30"><img src="assets/images/logoimg.png" height="48" alt="WorkFlow Logo"></div>
+      <p>Please wait...</p>        
+  </div>
+</div>
+
+--------------- App Component ------------------
+
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Injector, NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Client } from 'api/apiclient';
+import { Globals } from 'app/globals';
+import { SpinnerService } from 'app/services/spinner.service';
+import { AppComponent } from './app.component';
+import { routing } from './app.routing';
+import { HttpConfigInterceptor } from './core/interceptors/interceptors';
+import { PageLoaderComponent } from './layout/page-loader/page-loader.component';
+import { OAuthService } from './services/o-auth.service';
+import { SharedModule } from './shared/index';
+
+@NgModule({
+    declarations: [
+        AppComponent,
+        PageLoaderComponent
+    ],
+    imports: [
+        HttpClientModule,
+        BrowserModule,
+        routing,
+        BrowserAnimationsModule,
+        SharedModule
+    ],
+    providers: [Client, OAuthService, SpinnerService,
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: HttpConfigInterceptor,
+          multi: true
+        }],
+    bootstrap: [AppComponent]
+})
+export class AppModule {
+    constructor(private injector: Injector) {
+        Globals.injector = this.injector;
+      }
+}
+
+
+
+
