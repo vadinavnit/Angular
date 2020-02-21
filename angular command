@@ -1,0 +1,31 @@
+npm install -g @angular/cli
+
+ng install @angular/core 
+ng install @angular/cli
+
+
+----------------- uninstall then install golbbally install CLI -------------------------------
+
+npm uninstall -g @angular/cli
+npm cache clean --force
+
+npm install -g @angular/cli
+
+
+----------------- uninstall npm packages ---------------------------------------------------
+
+
+
+npm uninstall <name> removes the module from node_modules, but not package.json
+
+npm uninstall <name> --save also removes it from dependencies in package.json
+
+npm uninstall <name> --save-dev also removes it from devDependencies in package.json
+
+npm -g uninstall <name> --save also removes it globally
+
+
+----------------------- update angular version ------------------
+
+
+https://angular.io/cli/update
