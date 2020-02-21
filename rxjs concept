@@ -1,0 +1,17 @@
+subscribe         = use for call service
+Subject		  = one type of Observable use for pass value to one component to another ex. userName = new Subject<any>()
+Observable        = monitoring http request and response use for continue executing script
+Subscription
+Observer          = next(),error(),complete() is a collection of callbacks that knows how to listen to values delivered by the Observable.
+tap
+pipe              = A Pipeable Operator is a function that takes an Observable as its input and returns another Observable. It is a pure operation: the previous Observable stays unmodified.
+merge
+BehaviorSubject   = is same like subject a difference BehaviorSubject to intitilize value ex. userName = new BehaviorSubject('Navnit')
+asObservable      = asObservable makes the original subject inaccessible for subscribers. This way you can limit who can only subscribe and who can also emit values. For this to take effect you would need to make _showNavBar private though.
+map               = the operator called map is analogous to the Array method of the same name. Just as [1, 2, 3].map(x => x * x) will yield [1, 4, 9], the Observable created like this:
+		    ex. map(x => x * x)(of(1, 2, 3)).subscribe((v) => console.log(`value: ${v}`));
+first               ex. first()(of(1, 2, 3)).subscribe((v) => console.log(`value: ${v}`));
+
+
+@Input()          =  pass value to one componet to onother parent chield
+@Output()         =  pass value to one componet to onother output parent chield
