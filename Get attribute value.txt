@@ -1,0 +1,27 @@
+
+
+----------------- .html ----------------------
+
+  <select (change)="onChangeEmployee($event)"  formControlName="employee" class="form-control" id="employee" name="employee">
+                                <option value="">{{label.pleaseselect[lang]}}</option>
+                                <option *ngFor="let item of EmployeesList" [attr.data-statusid]="item.statusID" value="{{item.id}}">{{lang === 'eng' ? item.nameEn : item.nameAr}}</option>
+  </select>
+
+
+
+----------------- .ts----------------------
+
+onChangeEmployee(event: any) {
+    const value = Number(
+      event.target.options[event.target.options.selectedIndex].getAttribute(
+        'data-statusid'
+      )
+    );
+    const empStatusObj = this.EmpStatusList.find(
+      item => item.id === Number(value)
+    );
+    this.FromStatus = empStatusObj.status;
+    this.createForm.get('employeestatus').setValue(value);
+  }
+
+
