@@ -1,0 +1,27 @@
+    const obj: POPreparation = new POPreparation();
+    const CSD = new Date(`${this.val.CSD.value} UTC`);
+    const CSDDate = CSD.getDate() + '/' + (CSD.getMonth() + 1) + '/' + CSD.getFullYear();
+    obj.StyleNO = this.selectedStyle.Name;
+    obj.CustSoNo = this.val.CustSoNo.value;
+    obj.CSD = CSD;
+    obj.CSDDate = CSDDate;
+    obj.TypesOfOrder = this.val.TypesOfOrder.value;
+    obj.FinalQty = Number(this.val.FinalQty.value);
+
+    if (this.isDetailEdit === false) {
+      if (this.poPreparationDetail.some((item) => item.StyleNO === obj.StyleNO)) {
+        Toast.showInfo('Please add different style no');
+        return;
+      }
+    } else {
+      if (this.poPreparationDetail.some((item, index) =>
+      (item.StyleNO === obj.StyleNO) && (index !== this.index) )) {
+        Toast.showInfo('Please add different style no');
+        return;
+      }
+    }
+    if (this.isDetailEdit === false) {
+      this.poPreparationDetail.push(obj);
+    } else {
+      this.poPreparationDetail[this.index] = obj;
+    }
