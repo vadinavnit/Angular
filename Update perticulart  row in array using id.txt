@@ -1,0 +1,11 @@
+  onChangeIsAllow(obj: any, event, col: string) {
+    const isChecked = event.target.checked;
+    const restult = this.UpdatedList.find(item => item.systemUnitSecurity_ID === obj.systemUnitSecurity_ID);
+    if (col === 'isallow') {
+      restult.systemUnitSecurity_Allow = isChecked;
+    } else {
+      restult.systemUnitSecurity_ShowLogs = isChecked;
+    }
+    const index = this.UpdatedList.indexOf(restult);
+    this.UpdatedList[index] = restult;
+  }
