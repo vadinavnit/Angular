@@ -1,0 +1,5 @@
+     this.vendorList = resp.Result;
+        const key = 'VendorId';
+        const arrayUniqueByKey = [...new Map(this.vendorList.map(item => [item[key], item])).values()];
+        this.vendorList = arrayUniqueByKey;
+        this.POList = resp.Result;
