@@ -1,0 +1,7 @@
+ searchContacts(event) {
+        const value = event.target.value.toLowerCase();
+        var contacts = this.tempContacts.filter(el => {
+            return (el.name.toLowerCase().match(value) || el.email.toLowerCase().match(value));
+        });
+        this.settingContact = contacts;
+    }
