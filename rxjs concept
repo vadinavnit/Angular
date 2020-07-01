@@ -15,3 +15,5 @@ first               ex. first()(of(1, 2, 3)).subscribe((v) => console.log(`value
 
 @Input()          =  pass value to one componet to onother parent chield
 @Output()         =  pass value to one componet to onother output parent chield
+
+Subject/BehaviorSubject = https://www.youtube.com/watch?v=Ft5aDAKuW5Y
